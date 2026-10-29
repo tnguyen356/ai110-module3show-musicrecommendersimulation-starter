@@ -9,3 +9,11 @@ id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness
 8,Night Drive Loop,Neon Echo,synthwave,moody,0.75,110,0.49,0.73,0.22
 9,Focus Flow,LoRoom,lofi,focused,0.40,80,0.59,0.60,0.78
 10,Rooftop Lights,Indigo Parade,indie pop,happy,0.76,124,0.81,0.82,0.35
+11,Golden Hour Memories,Sable & Wren,folk,nostalgic,0.45,96,0.58,0.40,0.83
+12,Crownless King,Atlas Forge,metal,triumphant,0.95,148,0.62,0.45,0.04
+13,Static Heartbeat,Nova Kline,electronic,euphoric,0.88,128,0.80,0.90,0.08
+14,Sunday Porch Blues,Mack Holloway,blues,melancholic,0.33,68,0.30,0.42,0.75
+15,Island Afterglow,Tidewater Collective,reggae,playful,0.60,86,0.78,0.75,0.40
+16,Velvet Static,Juno Reyes,r&b,romantic,0.52,82,0.65,0.68,0.25
+17,Low Static Nights,Vesper Row,hip-hop,anxious,0.70,90,0.40,0.72,0.12
+18,Snowlight Sonata,Elena Marsh,classical,dreamy,0.25,64,0.52,0.15,0.95
