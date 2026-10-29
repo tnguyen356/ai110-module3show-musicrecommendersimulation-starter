@@ -29,6 +29,15 @@ Some prompts to answer:
 
 You can include a simple diagram or bullet list if helpful.
 
+Real-world recommendation suggests your potential next favorite song by scoring and computing your listening habits (genres, artists, replays, skips, etc) to compare it against other songs with similar characteristics. Futhermore, the system will also analyze your habits against other users that also favored songs that you like.  
+
+From these observations, while the database includes feature: genre, mood, energy, tempo, valence (how upbeat/cheerful is this song), danceability and acousticness, the system will be focusing on `genre, mood, energy` to find the user's next potential favorite song. 
+
+The `UserProfile` will store what the listener want and their listening habit: favorite_genre, mood, and target energy. 
+
+The `Recommender` will match each feature against the information in `UserProfile`, 1 if it's a match, 0 if it doesn't, then muliply by a weight to reflect how important each metric is. Mood and genre weights the most, with energy as tie breaker and acoustic match to reflect production style of the songe. 
+
+The song that scores the highest by the `Recommender` will be the recommendation. 
 ---
 
 ## Getting Started
