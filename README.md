@@ -29,7 +29,7 @@ Some prompts to answer:
 
 You can include a simple diagram or bullet list if helpful.
 
-Real-world recommendation suggests your potential next favorite song by scoring and computing your listening habits (genres, artists, replays, skips, etc) to compare it against other songs with similar characteristics. Futhermore, the system will also analyze your habits against other users that also favored songs that you like.  
+= Real-world recommendation suggests your potential next favorite song by scoring and computing your listening habits (genres, artists, replays, skips, etc) to compare it against other songs with similar characteristics. Futhermore, the system will also analyze your habits against other users that also favored songs that you like.  
 
 From these observations, while the database includes feature: genre, mood, energy, tempo, valence (how upbeat/cheerful is this song), danceability and acousticness, the system will be focusing on `genre, mood, energy` to find the user's next potential favorite song. 
 
@@ -38,6 +38,10 @@ The `UserProfile` will store what the listener want and their listening habit: f
 The `Recommender` will match each feature against the information in `UserProfile`, 1 if it's a match, 0 if it doesn't, then muliply by a weight to reflect how important each metric is. Mood and genre weights the most, with energy as tie breaker and acoustic match to reflect production style of the songe. 
 
 The song that scores the highest by the `Recommender` will be the recommendation. 
+
+Some potential bias includes:
+- This system reflect the designer's assumption about what matters the most for music taste, in this case is genre and mood, which can deny people that want to expand their music profile rather the same narrow lane. 
+- The song catalog right now is still quite small and doesn't have a high diversity of genre. Some less common genre might only have one song, thus every run of the recommender that weight heavily on genre will probably keep recommending the same song. 
 ---
 
 ## Getting Started
@@ -77,15 +81,31 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Sample Recommendation Output
 
-Paste a sample of your recommender's output here as a text block so a reader can see what it produces:
-
 ```
-# e.g.:
-# User profile: genre=indie, mood=chill, energy=low
-# Recommendations:
-#   1. ...
-#   2. ...
-#   3. ...
+Top Recommendations
+========================================
+
+1. Sunrise City by Neon Echo
+   Score: 5.48
+   Reasons:
+     - Matches your favorite genre (pop)
+     - Matches your favorite mood (happy)
+     - Energy level is close to what you're looking for
+     - Has a produced, non-acoustic sound matching your taste
+
+2. Rooftop Lights by Indigo Parade
+   Score: 3.46
+   Reasons:
+     - Matches your favorite mood (happy)
+     - Energy level is close to what you're looking for
+     - Has a produced, non-acoustic sound matching your taste
+
+3. Gym Hero by Max Pulse
+   Score: 3.37
+   Reasons:
+     - Matches your favorite genre (pop)
+     - Energy level is close to what you're looking for
+     - Has a produced, non-acoustic sound matching your taste
 ```
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->

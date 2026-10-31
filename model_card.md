@@ -32,6 +32,23 @@ Prompts:
 
 Avoid code here. Pretend you are explaining the idea to a friend who does not program.
 
+Think of it like a matchmaker that gives every song a "compatibility score" with you, then hands you the songs that scored highest.
+
+For each song, it looks at: the genre, the mood, how energetic it is, and how acoustic (stripped-down/unplugged) it sounds.
+
+For you, it asks: what's your favorite genre, your favorite mood, how much energy you want right now, and whether you tend to like acoustic-sounding music or more produced/electronic music.
+
+To turn that into a score, it checks each song one feature at a time and adds points when there's a match:
+
+- If the song's genre is your favorite genre, it adds a decent chunk of points.
+- If the song's mood matches your favorite mood, it adds the same decent chunk of points. Genre and mood matter the most, so they're worth the most points.
+- It compares the song's energy to the energy level you asked for — the closer they are, the more (smaller) bonus points it adds. This acts more like a tiebreaker between songs that already matched on genre and mood.
+- It gives a small bonus if the song's "acoustic-ness" lines up with whether you said you like acoustic music or not.
+
+All those points get added up into one final score per song, the songs get sorted from highest score to lowest, and you're shown the top few. Alongside each recommendation, it also lists the specific reasons it scored the song that way (e.g. "matches your favorite genre"), so the recommendation isn't a black box.
+
+Compared to the starter version (which just printed a placeholder and returned the first few songs untouched), this is the first version that actually reads real data, computes a real score per song based on your taste, ranks songs by that score, and explains itself in plain language instead of a hardcoded "Explanation placeholder".
+
 ---
 
 ## 4. Data  
