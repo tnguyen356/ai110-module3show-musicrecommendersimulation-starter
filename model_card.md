@@ -2,41 +2,17 @@
 
 ## 1. Model Name  
 
-Give your model a short, descriptive name.  
-Example: **VibeFinder 1.0**  
-
----
+**Museek 1.0**
 
 ## 2. Intended Use  
 
-Describe what your recommender is designed to do and who it is for. 
-
-Prompts:  
-
-- What kind of recommendations does it generate  
-- What assumptions does it make about the user  
-- Is this for real users or classroom exploration  
-
----
+The recommender gives the user three songs that match user's profiling of genre, mood, energy and ascoustic preference. The assumption this recommender makes about the user is that the user cares mainly about genre and mood, with minor attention toward energy level and ascoustic preference. This project is simply for classroom exploration, and is yet to be refined to reflect real users.
 
 ## 3. How the Model Works  
 
-Explain your scoring approach in simple language.  
+For each song, the model looks at: the genre, the mood, how energetic it is, and how acoustic (stripped-down/unplugged) it sounds.
 
-Prompts:  
-
-- What features of each song are used (genre, energy, mood, etc.)  
-- What user preferences are considered  
-- How does the model turn those into a score  
-- What changes did you make from the starter logic  
-
-Avoid code here. Pretend you are explaining the idea to a friend who does not program.
-
-Think of it like a matchmaker that gives every song a "compatibility score" with you, then hands you the songs that scored highest.
-
-For each song, it looks at: the genre, the mood, how energetic it is, and how acoustic (stripped-down/unplugged) it sounds.
-
-For you, it asks: what's your favorite genre, your favorite mood, how much energy you want right now, and whether you tend to like acoustic-sounding music or more produced/electronic music.
+For you, the model considers what's your favorite genre, your favorite mood, how much energy you want right now, and whether you tend to like acoustic-sounding music or more produced/electronic music.
 
 To turn that into a score, it checks each song one feature at a time and adds points when there's a match:
 
@@ -47,20 +23,16 @@ To turn that into a score, it checks each song one feature at a time and adds po
 
 All those points get added up into one final score per song, the songs get sorted from highest score to lowest, and you're shown the top few. Alongside each recommendation, it also lists the specific reasons it scored the song that way (e.g. "matches your favorite genre"), so the recommendation isn't a black box.
 
-Compared to the starter version (which just printed a placeholder and returned the first few songs untouched), this is the first version that actually reads real data, computes a real score per song based on your taste, ranks songs by that score, and explains itself in plain language instead of a hardcoded "Explanation placeholder".
+Compared to the starter logic, artist was removed as a preference due to a small number of songs in the database. If more titles are updated to the model, artist can be introduced as a key feature. 
 
 ---
 
 ## 4. Data  
 
-Describe the dataset the model uses.  
-
-Prompts:  
-
-- How many songs are in the catalog  
-- What genres or moods are represented  
-- Did you add or remove data  
-- Are there parts of musical taste missing in the dataset  
+There are 18 songs in the catalog (8 were added to the initial 10). 
+The moods include happy, chill, intense, relaxed, moody, focused, nostalgic, triumphant, euphoric, melancholic, playful, romantic, anxious, dreamy. 
+The genres represented: pop, lofi, rock, ambient, jazz, synthwave, indie pop, folk, metal, electronic, blues, reggae, r&b, hip-hop, classical.
+Unfortunately, there is no punk, funk, country, Latin, or K-pop music yet.
 
 ---
 
@@ -78,29 +50,11 @@ Prompts:
 
 ## 6. Limitations and Bias 
 
-Where the system struggles or behaves unfairly. 
-
-Prompts:  
-
-- Features it does not consider  
-- Genres or moods that are underrepresented  
-- Cases where the system overfits to one preference  
-- Ways the scoring might unintentionally favor some users  
-
----
+The system relies on exact match, where genre == genre which would only reward point for pop == pop instead of relative similarity like pop and indie pop. Also where mood == mood which doesn't consider "playful" or "euphoric" when comparing to "happy" even though they are talking about the same kind of feeling. Consequently, the system will always return the same 3 songs unless the user updates their own profile, therefore no diversity or exploration. 
 
 ## 7. Evaluation  
 
-How you checked whether the recommender behaved as expected. 
-
-Prompts:  
-
-- Which user profiles you tested  
-- What you looked for in the recommendations  
-- What surprised you  
-- Any simple tests or comparisons you ran  
-
-No need for numeric metrics unless you created some.
+I have 5 different profiles for 5 different genres. For each profile, there are always top 3 recommendation based on the score. Since my system weight genre and mood highest, I do expect the very top 1 of each profile to be distinct, and also score way higher than the other two songs. Running the metal profile is also a way for me to check for mixed signal. While the number one song does match the genre with high similarity in energy level, the score is still lower than other profile that matches in genre, mood, energy level and ascoustic. Yet, the one metal song in the list is still ranked the highest because the score weigh heavily on genre. 
 
 ---
 

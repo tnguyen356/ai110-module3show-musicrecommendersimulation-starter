@@ -2,32 +2,15 @@
 
 ## Project Summary
 
-In this project you will build and explain a small music recommender system.
+This version represents each song as a dictionary of attributes (genre, mood, energy, tempo, valence, danceability, acousticness) loaded from a CSV catalog of 18 songs, and a user's taste as a simple preference dictionary (favorite genre, favorite mood, target energy, and whether they like acoustic sound). 
 
-Your goal is to:
+`score_song` turns a user profile and a song into a weighted score: exact genre and mood matches each contribute the most points, how close the song's energy is to the user's target energy contributes a smaller tiebreaking bonus, and a match on acoustic preference adds a small bonus on top. 
 
-- Represent songs and a user "taste profile" as data
-- Design a scoring rule that turns that data into recommendations
-- Evaluate what your system gets right and wrong
-- Reflect on how this mirrors real world AI recommenders
-
-Replace this paragraph with your own summary of what your version does.
+`recommend_songs` scores every song in the catalog, sorts by score, and returns the top three along with a plain-language explanation of exactly which preferences the song matched.
 
 ---
 
 ## How The System Works
-
-Explain your design in plain language.
-
-Some prompts to answer:
-
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
-
-You can include a simple diagram or bullet list if helpful.
 
 = Real-world recommendation suggests your potential next favorite song by scoring and computing your listening habits (genres, artists, replays, skips, etc) to compare it against other songs with similar characteristics. Futhermore, the system will also analyze your habits against other users that also favored songs that you like.  
 
@@ -114,27 +97,13 @@ Top Recommendations
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
-
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
-
+The experiment I tried was commented out the mood metric in my scoring system. What I found out was since the genre weigh just as high, there was really no major change in the top 3 ranking. However, the scoring itself for each song is drastically lower.
 ---
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
-
-Examples:
-
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
-
----
+The system relies on exact match.
+The system will always return the same 3 songs unless there are drastic change to user's profile.
 
 ## Reflection
 
@@ -142,10 +111,125 @@ Read and complete `model_card.md`:
 
 [**Model Card**](model_card.md)
 
-Write 1 to 2 paragraphs here about what you learned:
+Building this project showed me that a recommender doesn't need anything fancy to "turn data into predictions" — at its core, `score_song` just represents both the song and the user as a handful of labeled attributes, checks which ones line up, and adds up weighted points for each match. The prediction is really just arithmetic: whichever song accumulates the most points under rules I chose (genre and mood matter most, energy is a tiebreaker, acoustic preference is a small bonus) gets recommended. What I didn't expect going in is how much the *weights themselves* are a design choice disguised as a technical detail — deciding genre and mood are worth 2.0 points each while energy and acoustic are worth less isn't neutral, it's an assumption about what "music taste" means, baked directly into the math.
 
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
+That's also where I think bias shows up most clearly. Because genre and mood are checked with exact string equality, the system can't recognize that "pop" and "indie pop," or "happy" and "euphoric," are related — it either hits an exact label or gets nothing, which rewards people whose taste happens to line up neatly with the catalog's existing labels and ignores everyone else. And because several genres and moods exist on only one song in my 18-song catalog, the recommender ends up returning the same few songs over and over for anyone outside the most common tastes, with no mechanism to explore or diversify. Real-world recommenders have the same risk at a much bigger scale — if the system (or its training data) assumes certain preferences matter most, or if the catalog underrepresents certain genres or artists, it will keep steering every user back toward the same narrow set of "safe" matches instead of genuinely reflecting what they'd actually enjoy.
 
+## PHASE 4: Step 1
+========================================
+Profile: baseline -> {'genre': 'pop', 'mood': 'happy', 'energy': 0.8, 'likes_acoustic': False}
+========================================
 
+1. Sunrise City by Neon Echo
+   Score: 5.48
+   Reasons:
+     - Matches your favorite genre (pop)
+     - Matches your favorite mood (happy)
+     - Energy level is close to what you're looking for
+     - Has a produced, non-acoustic sound matching your taste
 
+2. Rooftop Lights by Indigo Parade
+   Score: 3.46
+   Reasons:
+     - Matches your favorite mood (happy)
+     - Energy level is close to what you're looking for
+     - Has a produced, non-acoustic sound matching your taste
+
+3. Gym Hero by Max Pulse
+   Score: 3.37
+   Reasons:
+     - Matches your favorite genre (pop)
+     - Energy level is close to what you're looking for
+     - Has a produced, non-acoustic sound matching your taste
+
+========================================
+Profile: conflicting_signals -> {'genre': 'metal', 'mood': 'sad', 'energy': 0.95, 'likes_acoustic': True}
+========================================
+
+1. Crownless King by Atlas Forge
+   Score: 3.00
+   Reasons:
+     - Matches your favorite genre (metal)
+     - Energy level is close to what you're looking for
+
+2. Golden Hour Memories by Sable & Wren
+   Score: 1.00
+   Reasons:
+     - Has an acoustic sound you tend to enjoy
+
+3. Gym Hero by Max Pulse
+   Score: 0.98
+   Reasons:
+     - Energy level is close to what you're looking for
+
+========================================
+Profile: diverse_hiphop_anxious -> {'genre': 'hip-hop', 'mood': 'anxious', 'energy': 0.7, 'likes_acoustic': False}
+========================================
+
+1. Low Static Nights by Vesper Row
+   Score: 5.50
+   Reasons:
+     - Matches your favorite genre (hip-hop)
+     - Matches your favorite mood (anxious)
+     - Energy level is close to what you're looking for
+     - Has a produced, non-acoustic sound matching your taste
+
+2. Night Drive Loop by Neon Echo
+   Score: 1.45
+   Reasons:
+     - Energy level is close to what you're looking for
+     - Has a produced, non-acoustic sound matching your taste
+
+3. Rooftop Lights by Indigo Parade
+   Score: 1.44
+   Reasons:
+     - Energy level is close to what you're looking for
+     - Has a produced, non-acoustic sound matching your taste
+
+========================================
+Profile: diverse_reggae_playful -> {'genre': 'reggae', 'mood': 'playful', 'energy': 0.6, 'likes_acoustic': False}
+========================================
+
+1. Island Afterglow by Tidewater Collective
+   Score: 5.50
+   Reasons:
+     - Matches your favorite genre (reggae)
+     - Matches your favorite mood (playful)
+     - Energy level is close to what you're looking for
+     - Has a produced, non-acoustic sound matching your taste
+
+2. Velvet Static by Juno Reyes
+   Score: 1.42
+   Reasons:
+     - Energy level is close to what you're looking for
+     - Has a produced, non-acoustic sound matching your taste
+
+3. Low Static Nights by Vesper Row
+   Score: 1.40
+   Reasons:
+     - Energy level is close to what you're looking for
+     - Has a produced, non-acoustic sound matching your taste
+
+========================================
+Profile: diverse_rnb_romantic -> {'genre': 'r&b', 'mood': 'romantic', 'energy': 0.52, 'likes_acoustic': False}
+========================================
+
+1. Velvet Static by Juno Reyes
+   Score: 5.50
+   Reasons:
+     - Matches your favorite genre (r&b)
+     - Matches your favorite mood (romantic)
+     - Energy level is close to what you're looking for
+     - Has a produced, non-acoustic sound matching your taste
+
+2. Island Afterglow by Tidewater Collective
+   Score: 1.42
+   Reasons:
+     - Energy level is close to what you're looking for
+     - Has a produced, non-acoustic sound matching your taste
+
+3. Low Static Nights by Vesper Row
+   Score: 1.32
+   Reasons:
+     - Energy level is close to what you're looking for
+     - Has a produced, non-acoustic sound matching your taste
